@@ -3,6 +3,9 @@ package com.garrell.co.baseapp.screens.common;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.garrell.co.alchemytcg.screens.game.GameFragment;
+import com.garrell.co.alchemytcg.screens.game.GameViewMvc;
+import com.garrell.co.alchemytcg.screens.game.GameViewMvcImpl;
 import com.garrell.co.baseapp.screens.common.dialogs.info.InfoViewMvc;
 import com.garrell.co.baseapp.screens.common.dialogs.info.InfoViewMvcImpl;
 import com.garrell.co.baseapp.screens.common.dialogs.prompt.PromptViewMvc;
@@ -29,4 +32,9 @@ public class ViewMvcFactory {
     public HomeViewMvc newHomeViewMvc(ViewGroup container) {
         return new HomeViewMvcImpl(layoutInflater, container);
     }
+
+    public GameViewMvc newGameViewMvc(ViewGroup container) {
+        return new GameViewMvcImpl(layoutInflater, container);
+    }
+
 }
