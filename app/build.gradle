@@ -7,7 +7,7 @@ android {
     buildToolsVersion = "30.0.3"
 
     defaultConfig {
-        applicationId "com.garrell.co.apptemplate"
+        applicationId "com.garrell.co.alchemytcg"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
