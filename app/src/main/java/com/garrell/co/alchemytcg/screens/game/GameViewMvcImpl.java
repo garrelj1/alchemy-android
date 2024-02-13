@@ -1,24 +1,26 @@
 package com.garrell.co.alchemytcg.screens.game;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Button;
 
+import com.garrell.co.alchemytcg.card.DragableCardView;
 import com.garrell.co.baseapp.R;
 import com.garrell.co.baseapp.screens.common.mvcviews.BaseObservableViewMvc;
 
 public class GameViewMvcImpl extends BaseObservableViewMvc<GameViewMvc.Listener> implements GameViewMvc {
 
-    private final Button card;
+    private final DragableCardView card;
 
+    @SuppressLint("ClickableViewAccessibility")
     public GameViewMvcImpl(LayoutInflater layoutInflater, ViewGroup container) {
         setRootView(layoutInflater.inflate(R.layout.layout_game, container, false));
         card = getRootView().findViewById(R.id.card);
-        card.setOnClickListener(v -> {
-            for (Listener l : getListeners()) {
-                l.onCardPlayed((String) card.getText());
-            }
-        });
+        //card.setOnClickListener(v -> {
+        //    for (Listener l : getListeners()) {
+        //        l.onCardPlayed((String) card.getText());
+        //    }
+        //});
     }
 
     @Override
