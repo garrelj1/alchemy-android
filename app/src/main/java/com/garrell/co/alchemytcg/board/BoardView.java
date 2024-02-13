@@ -1,6 +1,7 @@
 package com.garrell.co.alchemytcg.board;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -22,4 +23,5 @@ public class BoardView extends View {
     public BoardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
+
 }

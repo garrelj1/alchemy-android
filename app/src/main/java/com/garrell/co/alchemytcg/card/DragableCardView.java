@@ -1,6 +1,7 @@
 package com.garrell.co.alchemytcg.card;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,17 +13,26 @@ import timber.log.Timber;
 
 public class DragableCardView extends AppCompatTextView implements View.OnTouchListener {
 
+
+    public interface Listener {
+        void onCardPlaced(Rect hitbox);
+    }
+
+    private Listener listener;
+
     private int CARD_HITBOX_HEIGHT = 10;
     private int CARD_HITBOX_WIDTH = 10;
 
     private float dX = 0;
     private float dY = 0;
 
+    private float startingLocationX = -1;
+    private float startingLocationY = -1;
+
     public DragableCardView(Context context) {
         super(context);
         init();
     }
-
 
     public DragableCardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -39,6 +49,17 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
         setClickable(true);
         setFocusable(true);
         setOnTouchListener(this);
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (startingLocationX == -1) {
+            startingLocationX = left;
+        }
+        if (startingLocationY == -1) {
+            startingLocationY = top;
+        }
     }
 
     @Override
@@ -59,6 +80,10 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
                         .y(event.getRawY() + dY)
                         .setDuration(0)
                         .start();
+                Timber.d("onTouchEvent final position: %s", getInnerHitboxInWindow());
+                break;
+            case MotionEvent.ACTION_UP:
+                listener.onCardPlaced(getInnerHitboxInWindow());
                 break;
             default:
                 return false;
@@ -67,38 +92,40 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
         return true;
     }
 
-    private InnerHitbox getInnerHitbox() {
-        float centerX =  getRight() - getLeft();
-        float centerY = getBottom() - getTop();
+    private Rect getInnerHitboxInWindow() {
+        int[] xy = new int[2];
+        getLocationInWindow(xy);
+        int hitboxLeft = (xy[0] + getWidth() / 2) - CARD_HITBOX_WIDTH;
+        int hitboxRight = (xy[0] + getWidth() / 2) + CARD_HITBOX_WIDTH;
+        int hitboxTop = (xy[1] + getHeight() / 2) + CARD_HITBOX_HEIGHT;
+        int hitboxBottom = (xy[1] + getHeight() / 2) - CARD_HITBOX_HEIGHT;
 
-        float left = centerX - CARD_HITBOX_WIDTH;
-        float right = centerX + CARD_HITBOX_WIDTH;
-        float top = centerY - CARD_HITBOX_HEIGHT;
-        float bottom = centerY + CARD_HITBOX_HEIGHT;
-
-        return new InnerHitbox(left, right, top, bottom);
+        return new Rect(hitboxLeft, hitboxTop, hitboxRight, hitboxBottom);
     }
 
-    public boolean isWithinBox(float left, float right, float top, float bottom) {
-        InnerHitbox hitbox = getInnerHitbox();
+    private Rect getInnerHitbox() {
+        int hitboxLeft = (getLeft() + getWidth() / 2) - CARD_HITBOX_WIDTH;
+        int hitboxRight = (getRight() - getWidth() / 2) + CARD_HITBOX_WIDTH;
+        int hitboxTop = (getTop() - getHeight() / 2) + CARD_HITBOX_HEIGHT;
+        int hitboxBottom = (getBottom() + getHeight() / 2) - CARD_HITBOX_HEIGHT;
 
-        if (hitbox.left > right) {
-            return false;
-        }
+        return new Rect(hitboxLeft, hitboxTop, hitboxRight, hitboxBottom);
+    }
 
-        if (hitbox.right < left) {
-            return false;
-        }
+    public void resetLocation() {
+        Timber.d("Resetting location to x: " + startingLocationX + " y: " + startingLocationY);
+        animate().x(startingLocationX)
+                .y(startingLocationY)
+                .setDuration(500)
+                .start();
+    }
 
-        if (hitbox.top < bottom) {
-            return false;
-        }
+    public void registerListener(Listener listener) {
+        this.listener = listener;
+    }
 
-        if (hitbox.bottom > top) {
-            return false;
-        }
-
-        return true;
+    public void unregisterListener() {
+        this.listener = null;
     }
 
     private static class InnerHitbox {
