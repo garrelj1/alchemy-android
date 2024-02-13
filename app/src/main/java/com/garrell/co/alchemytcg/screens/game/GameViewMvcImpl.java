@@ -38,28 +38,7 @@ public class GameViewMvcImpl extends BaseObservableViewMvc<GameViewMvc.Listener>
     }
 
     public boolean isCardWithinSlot(Rect card, Rect slot) {
-        if (card.left > slot.right) {
-            Timber.d("Card " + card.left + " is to the right of the slot " + slot.right);
-            return false;
-        }
-
-        if (card.right < slot.left) {
-            Timber.d("Card " + card.right + " is to the left of the slot " + slot.left);
-            return false;
-        }
-
-        if (card.top < slot.bottom) {
-            Timber.d("Card " + card.top + " is below the slot " + slot.bottom);
-            return false;
-        }
-
-        if (card.bottom > slot.top) {
-            Timber.d("Card " + card.bottom + " is above the slot " + slot.top);
-            return false;
-        }
-
-        Timber.d("Card is within the slot");
-        return true;
+        return card.intersect(slot);
     }
 
     @Override
