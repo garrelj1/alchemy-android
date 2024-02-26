@@ -15,7 +15,7 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
 
 
     public interface Listener {
-        void onCardPlaced(Rect hitbox);
+        void onCardPlaced(DragableCardView card, Rect hitbox);
     }
 
     private Listener listener;
@@ -83,7 +83,7 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
                 Timber.d("onTouchEvent final position: %s", getInnerHitboxInWindow());
                 break;
             case MotionEvent.ACTION_UP:
-                listener.onCardPlaced(getInnerHitboxInWindow());
+                listener.onCardPlaced(this, getInnerHitboxInWindow());
                 break;
             default:
                 return false;
