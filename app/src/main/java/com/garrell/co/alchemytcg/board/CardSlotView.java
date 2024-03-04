@@ -15,6 +15,7 @@ import timber.log.Timber;
 public class CardSlotView extends AppCompatTextView {
 
     private Paint borderPaint;
+    private boolean empty;
 
     public CardSlotView(Context context) {
         super(context);
@@ -57,4 +58,11 @@ public class CardSlotView extends AppCompatTextView {
         return new Rect(getLeft(), getTop(), getRight(), getBottom());
     }
 
+    public boolean isEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(boolean empty) {
+        this.empty = empty;
+    }
 }

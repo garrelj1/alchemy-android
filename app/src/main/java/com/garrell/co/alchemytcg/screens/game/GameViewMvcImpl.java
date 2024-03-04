@@ -6,14 +6,10 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.garrell.co.alchemytcg.board.CardSlotView;
-import com.garrell.co.alchemytcg.card.DragableCardView;
+import com.garrell.co.alchemytcg.card.Describable;
+import com.garrell.co.alchemytcg.card.view.DragableCardView;
 import com.garrell.co.baseapp.R;
 import com.garrell.co.baseapp.screens.common.mvcviews.BaseObservableViewMvc;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import timber.log.Timber;
 
 public class GameViewMvcImpl extends BaseObservableViewMvc<GameViewMvc.Listener>
         implements GameViewMvc, DragableCardView.Listener {
@@ -51,19 +47,14 @@ public class GameViewMvcImpl extends BaseObservableViewMvc<GameViewMvc.Listener>
     }
 
     @Override
-    public void addCardToHand(String cardName) {
-        //card.setText(cardName);
-    }
-
-    public boolean isCardWithinSlot(Rect card, Rect slot) {
-        return card.intersect(slot);
-    }
-
-    @Override
     public void onCardPlaced(DragableCardView card, Rect cardHitbox) {
-        if (isCardWithinSlot(cardHitbox, leftSlot.getHitbox()) ||
-            isCardWithinSlot(cardHitbox, centerSlot.getHitbox()) ||
-            isCardWithinSlot(cardHitbox, rightSlot.getHitbox())
+        if (cardHitbox.intersect(leftSlot.getHitbox())) {
+            leftSlot.setEmpty(false);
+        }
+
+        if (cardHitbox.intersect(leftSlot.getHitbox()) && leftSlot.isEmpty() ||
+            cardHitbox.intersect(centerSlot.getHitbox()) && centerSlot.isEmpty() ||
+            cardHitbox.intersect(rightSlot.getHitbox()) && rightSlot.isEmpty()
         ) {
             for (Listener l : getListeners()) {
                 l.onCardPlayed(card.getText().toString());
@@ -71,6 +62,10 @@ public class GameViewMvcImpl extends BaseObservableViewMvc<GameViewMvc.Listener>
         } else {
             card.resetLocation();
         }
+    }
+
+    @Override
+    public void addCardToHand(Describable card) {
     }
 
 }

@@ -1,4 +1,4 @@
-package com.garrell.co.alchemytcg.card;
+package com.garrell.co.alchemytcg.card.view;
 
 import android.content.Context;
 import android.graphics.Rect;

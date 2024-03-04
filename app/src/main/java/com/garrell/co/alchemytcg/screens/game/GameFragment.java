@@ -9,6 +9,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.garrell.co.alchemytcg.card.ActionCard;
+import com.garrell.co.alchemytcg.card.NumberCard;
+import com.garrell.co.alchemytcg.card.OperatorCard;
 import com.garrell.co.baseapp.screens.common.ViewMvcFactory;
 import com.garrell.co.baseapp.screens.common.controller.BaseFragment;
 
@@ -19,6 +22,8 @@ public class GameFragment extends BaseFragment implements GameViewMvc.Listener {
 
     private ViewMvcFactory viewFactory;
     private GameViewMvc gameViewMvc;
+
+    private PlayCardSetUseCase playCardSetUseCase;
 
     public static GameFragment newInstance() {
         return new GameFragment();
@@ -39,7 +44,6 @@ public class GameFragment extends BaseFragment implements GameViewMvc.Listener {
 
     @Override
     public void onResume() {
-        gameViewMvc.addCardToHand(getNewCard());
         gameViewMvc.registerListener(this);
 
         super.onResume();
@@ -49,7 +53,12 @@ public class GameFragment extends BaseFragment implements GameViewMvc.Listener {
     public void onCardPlayed(String card) {
         Toast.makeText(getActivity(), "You played: " + card, Toast.LENGTH_LONG).show();
 
-        gameViewMvc.addCardToHand(getNewCard());
+    }
+
+    @Override
+    public void onCardSetPlayed(NumberCard numberCard,
+                                OperatorCard operatorCard,
+                                ActionCard actionCard) {
     }
 
     private String getNewCard() {
