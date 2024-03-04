@@ -1,9 +1,10 @@
 package com.garrell.co.alchemytcg.card;
 
-public class NumberCard implements Describable {
+public class NumberCard extends Card implements DescribableCard {
     private final int number;
 
-    public NumberCard(int number) {
+    public NumberCard(int id, int number) {
+        super(id);
         this.number = number;
     }
 
@@ -15,4 +16,5 @@ public class NumberCard implements Describable {
     public String describe() {
         return Integer.toString(number);
     }
+
 }

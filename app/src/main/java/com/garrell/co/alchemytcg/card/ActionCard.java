@@ -1,6 +1,6 @@
 package com.garrell.co.alchemytcg.card;
 
-public class ActionCard implements Describable {
+public class ActionCard extends Card implements DescribableCard {
     private final TargetPlayer player;
     private final TargetAction action;
 
@@ -16,7 +16,8 @@ public class ActionCard implements Describable {
         ATTACK
     }
 
-    public ActionCard(TargetPlayer player, TargetAction action) {
+    public ActionCard(int id, TargetPlayer player, TargetAction action) {
+        super(id);
         this.player = player;
         this.action = action;
     }

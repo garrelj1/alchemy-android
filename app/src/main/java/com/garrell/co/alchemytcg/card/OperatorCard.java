@@ -1,6 +1,6 @@
 package com.garrell.co.alchemytcg.card;
 
-public class OperatorCard implements Describable {
+public class OperatorCard extends Card implements DescribableCard {
 
     private final Operator op;
 
@@ -21,7 +21,8 @@ public class OperatorCard implements Describable {
         }
     }
 
-    private OperatorCard(Operator op) {
+    private OperatorCard(int id, Operator op) {
+        super(id);
         this.op = op;
     }
 
