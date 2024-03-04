@@ -35,7 +35,6 @@ public class CardSlotView extends AppCompatTextView {
 
     private void init() {
         setWillNotDraw(false);
-        setText("Play Here");
         setTextAlignment(TEXT_ALIGNMENT_CENTER);
 
         borderPaint = new Paint();

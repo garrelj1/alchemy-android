@@ -9,4 +9,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="operator">Operator</string>
+    <string name="base_value">Base Value</string>
+    <string name="operator_slot">Operator Slot</string>
+    <string name="player_action">Player Action</string>
 </resources>

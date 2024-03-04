@@ -5,42 +5,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.garrell.co.alchemytcg.card.view.CardHandLayoutManager
-        android:id="@+id/card_hand"
+    <TextView
+        android:id="@+id/opponent_health"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Opponent's Health 10"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.071" />
+
+    <TextView
+        android:id="@+id/base_value_label"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="@string/base_value"
+        android:textSize="12sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/base_value"
+        app:layout_constraintEnd_toStartOf="@+id/operator_slot"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/base_value"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="1"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/operator_slot"
+        app:layout_constraintEnd_toStartOf="@+id/operator_slot"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.garrell.co.alchemytcg.board.CardSlotView
+        android:id="@+id/operator_slot"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:text="@string/operator_slot"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/base_value"
+        app:layout_constraintEnd_toStartOf="@+id/number_slot"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.673" />
+
+    <com.garrell.co.alchemytcg.board.CardSlotView
+        android:id="@+id/number_slot"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:text="@string/operator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/player_action_slot"
+        app:layout_constraintStart_toEndOf="@+id/operator_slot"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.673" />
+
+    <com.garrell.co.alchemytcg.board.CardSlotView
+        android:id="@+id/player_action_slot"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:text="@string/player_action"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/number_slot"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.673" />
+
+    <Space
+        android:id="@+id/card_hand_bottom"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginBottom="104dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <com.garrell.co.alchemytcg.board.CardSlotView
-        android:id="@+id/left_slot"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/center_slot"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.673" />
-
-    <com.garrell.co.alchemytcg.board.CardSlotView
-        android:id="@+id/center_slot"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.673" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="207dp" />
 
-    <com.garrell.co.alchemytcg.board.CardSlotView
-        android:id="@+id/right_slot"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
+    <TextView
+        android:id="@+id/your_health"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Health 10"
+        android:textSize="25sp"
+        android:layout_marginBottom="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/center_slot"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.673" />
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

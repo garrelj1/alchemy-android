@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.garrell.co.alchemytcg.board.CardSlotView;
 import com.garrell.co.alchemytcg.card.Describable;
-import com.garrell.co.alchemytcg.card.view.CardHandLayoutManager;
 import com.garrell.co.alchemytcg.card.view.DragableCardView;
 import com.garrell.co.baseapp.R;
 import com.garrell.co.baseapp.screens.common.mvcviews.BaseObservableViewMvc;
@@ -27,7 +26,10 @@ public class GameViewMvcImpl extends BaseObservableViewMvc<GameViewMvc.Listener>
         cardHandLayoutManager = getRootView().findViewById(R.id.card_hand);
 
         DragableCardView cardView = new DragableCardView(layoutInflater.getContext());
-        cardView.setWidth();
+        cardView.setWidth(45);
+        cardView.setWidth(60);
+        cardView.setText("test");
+        cardView.registerListener(this);
         cardHandLayoutManager.addCardView(cardView);
 
         leftSlot = getRootView().findViewById(R.id.left_slot);
