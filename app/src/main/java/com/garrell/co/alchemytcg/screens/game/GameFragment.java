@@ -73,8 +73,8 @@ public class GameFragment extends BaseFragment implements GameViewMvc.Listener {
         String toast = "You played card set: " +
                         cards.get(actionCardId).describe() + " - " +
                         BASE_VALUE + " " +
-                        cards.get(numberCardId).describe() + " " +
-                        cards.get(operatorCardId).describe() + " ";
+                        cards.get(operatorCardId).describe() + " " +
+                        cards.get(numberCardId).describe() + " ";
         Toast.makeText(getActivity(), toast, Toast.LENGTH_LONG).show();
     }
 

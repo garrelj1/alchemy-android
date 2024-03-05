@@ -93,6 +93,8 @@ public class GameViewMvcImpl extends BaseObservableViewMvc<GameViewMvc.Listener>
                 l.onCardSetPlayed(operatorCardId, numberSlotCardId, playerActionSlotCardId);
             }
 
+            cardLayoutManager.remove(card);
+
             operatorSlot.getCardInSlot().unregisterListener(this);
             numberSlot.getCardInSlot().unregisterListener(this);
             playerActionSlot.getCardInSlot().unregisterListener(this);

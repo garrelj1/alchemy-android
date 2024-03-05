@@ -111,22 +111,24 @@ public class CardHandLayoutManager {
 
         // add to constraintLayout
         constraintLayout.addView(newNode.cardView);
+        constraintLayout.requestLayout();
 
         return newNode.cardView;
     }
 
-    public void remove(DragableCardView view) {
-        boolean removed = removeCardInternal(view);
+    public void remove(PlayableCardView playableCard) {
+        boolean removed = removeCardInternal(playableCard);
         if (removed) {
-            constraintLayout.removeView(view);
+            constraintLayout.removeView(playableCard.getRootView());
+            constraintLayout.requestLayout();
         }
     }
 
-    private boolean removeCardInternal(DragableCardView view) {
+    private boolean removeCardInternal(PlayableCardView view) {
         ViewNode current = head;
 
         while (current != null) {
-            if (current.getViewId() == view.getId()) {
+            if (current.getViewId() == view.getViewId()) {
                 if (current == head) {
                     head = head.getNext();
                     if (head != null) {

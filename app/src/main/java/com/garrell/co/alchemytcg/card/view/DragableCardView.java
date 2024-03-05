@@ -1,6 +1,9 @@
 package com.garrell.co.alchemytcg.card.view;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -31,6 +34,8 @@ public class DragableCardView
     private int CARD_HITBOX_HEIGHT = 10;
     private int CARD_HITBOX_WIDTH = 10;
 
+    private Paint borderPaint;
+
     private float dX = 0;
     private float dY = 0;
 
@@ -57,6 +62,11 @@ public class DragableCardView
         setClickable(true);
         setFocusable(true);
         setOnTouchListener(this);
+
+        borderPaint = new Paint();
+        borderPaint.setColor(Color.BLACK);
+        borderPaint.setStrokeWidth(3);
+        borderPaint.setStyle(Paint.Style.STROKE);
     }
 
     @Override
@@ -78,6 +88,13 @@ public class DragableCardView
         if (startingLocationY == -1) {
             startingLocationY = top;
         }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        canvas.drawRect(0, 0, getWidth(), getHeight(), borderPaint);
     }
 
     @Override
