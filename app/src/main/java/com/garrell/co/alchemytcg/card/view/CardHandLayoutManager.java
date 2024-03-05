@@ -6,64 +6,99 @@ import android.widget.Space;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.garrell.co.alchemytcg.card.DescribableCard;
+import com.garrell.co.baseapp.R;
+import com.garrell.co.baseapp.screens.common.views.ViewToolkit;
+import com.garrell.co.baseapp.screens.common.views.res.ResourcesFacade;
 
 public class CardHandLayoutManager {
 
-    private static class CardViewNode {
-        private DragableCardView cardView;
-        private ConstraintLayout.LayoutParams layoutParams;
-        private CardViewNode previous;
-        private CardViewNode next;
+    private interface ViewNode {
+        int getViewId();
+        void setNext(ViewNode node);
+        ViewNode getNext();
+        void setPrevious(ViewNode node);
+        ViewNode getPrevious();
+    }
 
-        private CardViewNode(Context context, String cardDescription) {
-            this.cardView = new DragableCardView(context);
-            cardView.setText(cardDescription);
+    private static abstract class BaseViewNode {
+        private ViewNode previous;
+        private ViewNode next;
 
-            this.layoutParams = new ConstraintLayout.LayoutParams(
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                    ConstraintLayout.LayoutParams.WRAP_CONTENT
-            );
-
-            cardView.setLayoutParams(layoutParams);
-        }
-
-        int getViewId() {
-            return cardView.getId();
-        }
-
-        void setNext(CardViewNode next) {
+        public void setNext(ViewNode next) {
             this.next = next;
-            layoutParams.endToStart = next.getViewId();
         }
 
-        void setPrevious(CardViewNode previous) {
+        public ViewNode getNext() {
+            return next;
+        }
+
+        public void setPrevious(ViewNode previous) {
             this.previous = previous;
-            layoutParams.startToEnd = previous.getViewId();
         }
 
-        public void setBaseline(Space cardBaseline) {
-            layoutParams.bottomToTop = cardBaseline.getTop();
+        public ViewNode getPrevious() {
+            return previous;
         }
     }
 
+    private static class ParentViewNode extends BaseViewNode implements ViewNode {
+        @Override
+        public int getViewId() {
+            return ConstraintLayout.LayoutParams.PARENT_ID;
+        }
+    }
+
+    private static class CardViewNode extends BaseViewNode implements ViewNode {
+        private final DragableCardView cardView;
+        private final ConstraintLayout.LayoutParams layoutParams;
+
+        private CardViewNode(DragableCardView cardView) {
+            this.cardView = cardView;
+            this.layoutParams = (ConstraintLayout.LayoutParams) cardView.getLayoutParams();
+            this.setPrevious(new ParentViewNode());
+            this.setNext(new ParentViewNode());
+        }
+
+        @Override
+        public int getViewId() {
+            return cardView.getId();
+        }
+
+        @Override
+        public void setNext(ViewNode next) {
+            super.setNext(next);
+            layoutParams.endToStart = next.getViewId();
+        }
+
+        @Override
+        public void setPrevious(ViewNode previous) {
+            super.setPrevious(previous);
+            layoutParams.startToEnd = previous.getViewId();
+        }
+
+    }
+
+    private final ResourcesFacade resourcesFacade;
+    private final ViewToolkit viewToolkit;
     private final Context context;
     private final ConstraintLayout constraintLayout;
     private final Space cardBaseline;
 
-    private CardViewNode head;
-    private CardViewNode tail;
+    private ViewNode head;
+    private ViewNode tail;
 
     public CardHandLayoutManager(Context context,
                                  ConstraintLayout constraintLayout,
                                  Space cardBaseline) {
         this.context = context;
+        this.resourcesFacade = new ResourcesFacade(context);
+        this.viewToolkit = new ViewToolkit(context);
         this.constraintLayout = constraintLayout;
         this.cardBaseline = cardBaseline;
     }
 
     public DragableCardView add(DescribableCard card) {
-        CardViewNode newNode = new CardViewNode(context, card.describe());
-        newNode.setBaseline(cardBaseline);
+        CardViewNode newNode = new CardViewNode(createDefaultCardView(card));
 
         if (head == null) {
             head = newNode;
@@ -81,6 +116,59 @@ public class CardHandLayoutManager {
     }
 
     public void remove(DragableCardView view) {
+        boolean removed = removeCardInternal(view);
+        if (removed) {
+            constraintLayout.removeView(view);
+        }
+    }
+
+    private boolean removeCardInternal(DragableCardView view) {
+        ViewNode current = head;
+
+        while (current != null) {
+            if (current.getViewId() == view.getId()) {
+                if (current == head) {
+                    head = head.getNext();
+                    if (head != null) {
+                        head.setPrevious(new ParentViewNode());
+                    }
+                }
+                else if (current == tail) {
+                    tail = tail.getPrevious();
+                    tail.setNext(new ParentViewNode());
+                }
+                else {
+                    current.getPrevious().setNext(current.getNext());
+                    current.getNext().setPrevious(current.getPrevious());
+                }
+                // view removed
+                return true;
+            }
+            current = current.getNext();
+        }
+
+        // view was not found
+        return false;
+    }
+
+    private DragableCardView createDefaultCardView(DescribableCard card) {
+        DragableCardView cardView = new DragableCardView(context);
+        cardView.setText(card.describe());
+
+        // set width and height
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
+            viewToolkit.dpToPx(resourcesFacade.getResource(R.dimen.card_width)),
+            viewToolkit.dpToPx(resourcesFacade.getResource(R.dimen.card_height))
+        );
+
+        // initial layout position
+        layoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+        layoutParams.bottomToTop = cardBaseline.getId();
+
+        cardView.setLayoutParams(layoutParams);
+
+        return cardView;
     }
 
 }

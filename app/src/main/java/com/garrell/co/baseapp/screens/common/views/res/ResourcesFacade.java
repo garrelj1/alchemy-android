@@ -16,4 +16,8 @@ public class ResourcesFacade {
         return resources.getDisplayMetrics();
     }
 
+    public float getResource(int id) {
+        return resources.getDimension(id);
+    }
+
 }

@@ -9,16 +9,24 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import com.garrell.co.baseapp.common.observable.BaseObservable;
+import com.garrell.co.baseapp.common.observable.Observable;
+
+import java.util.Set;
+
 import timber.log.Timber;
 
-public class DragableCardView extends AppCompatTextView implements View.OnTouchListener {
+public class DragableCardView
+        extends AppCompatTextView
+        implements View.OnTouchListener, PlayableCardView, Observable<PlayableCardView.Listener> {
 
-
-    public interface Listener {
-        void onCardPlaced(DragableCardView card, Rect hitbox);
+    public static class CardPlacedObservable extends BaseObservable<PlayableCardView.Listener> {
+        protected Set<PlayableCardView.Listener> getListenerz() {
+            return getListeners();
+        }
     }
 
-    private Listener listener;
+    private final CardPlacedObservable observable = new CardPlacedObservable();
 
     private int CARD_HITBOX_HEIGHT = 10;
     private int CARD_HITBOX_WIDTH = 10;
@@ -49,6 +57,16 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
         setClickable(true);
         setFocusable(true);
         setOnTouchListener(this);
+    }
+
+    @Override
+    public String getDescription() {
+        return getText().toString();
+    }
+
+    @Override
+    public int getViewId() {
+        return getId();
     }
 
     @Override
@@ -83,7 +101,9 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
                 Timber.d("onTouchEvent final position: %s", getInnerHitboxInWindow());
                 break;
             case MotionEvent.ACTION_UP:
-                listener.onCardPlaced(this, getInnerHitboxInWindow());
+                for (PlayableCardView.Listener l : this.observable.getListenerz()) {
+                    l.onCardPlayed(this, getInnerHitboxInWindow());
+                }
                 break;
             default:
                 return false;
@@ -91,6 +111,17 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
 
         return true;
     }
+
+    @Override
+    public void resetLocation() {
+        Timber.d("Resetting location to x: " + startingLocationX + " y: " + startingLocationY);
+        animate().x(startingLocationX)
+                .y(startingLocationY)
+                .setDuration(500)
+                .start();
+    }
+
+
 
     private Rect getInnerHitboxInWindow() {
         int[] xy = new int[2];
@@ -112,20 +143,16 @@ public class DragableCardView extends AppCompatTextView implements View.OnTouchL
         return new Rect(hitboxLeft, hitboxTop, hitboxRight, hitboxBottom);
     }
 
-    public void resetLocation() {
-        Timber.d("Resetting location to x: " + startingLocationX + " y: " + startingLocationY);
-        animate().x(startingLocationX)
-                .y(startingLocationY)
-                .setDuration(500)
-                .start();
+
+
+    @Override
+    public void registerListener(PlayableCardView.Listener listener) {
+        this.observable.registerListener(listener);
     }
 
-    public void registerListener(Listener listener) {
-        this.listener = listener;
-    }
-
-    public void unregisterListener() {
-        this.listener = null;
+    @Override
+    public void unregisterListener(PlayableCardView.Listener listener) {
+        this.observable.unregisterListener(listener);
     }
 
     private static class InnerHitbox {

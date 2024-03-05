@@ -21,7 +21,7 @@ public class OperatorCard extends Card implements DescribableCard {
         }
     }
 
-    private OperatorCard(int id, Operator op) {
+    public OperatorCard(int id, Operator op) {
         super(id);
         this.op = op;
     }

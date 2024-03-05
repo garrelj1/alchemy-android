@@ -8,11 +8,14 @@ import com.garrell.co.baseapp.screens.common.mvcviews.ObservableViewMvc;
 
 public interface GameViewMvc extends ObservableViewMvc<GameViewMvc.Listener> {
 
+
     interface Listener {
         void onCardPlayed(String card);
-        void onCardSetPlayed(NumberCard numberCard, OperatorCard operatorCard, ActionCard actionCard);
+        void onCardSetPlayed(int numberCardId, int operatorCardId, int actionCardId);
     }
 
     void addCardToHand(DescribableCard card);
+
+    void setBaseValue(int baseValue);
 
 }

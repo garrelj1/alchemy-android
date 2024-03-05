@@ -10,12 +10,12 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 
-import timber.log.Timber;
+import com.garrell.co.alchemytcg.card.view.PlayableCardView;
 
 public class CardSlotView extends AppCompatTextView {
 
     private Paint borderPaint;
-    private boolean empty;
+    private PlayableCardView card;
 
     public CardSlotView(Context context) {
         super(context);
@@ -31,7 +31,6 @@ public class CardSlotView extends AppCompatTextView {
         super(context, attrs, defStyleAttr);
         init();
     }
-
 
     private void init() {
         setWillNotDraw(false);
@@ -58,10 +57,18 @@ public class CardSlotView extends AppCompatTextView {
     }
 
     public boolean isEmpty() {
-        return empty;
+        return card == null;
     }
 
-    public void setEmpty(boolean empty) {
-        this.empty = empty;
+    public void setCardInSlot(PlayableCardView card) {
+        this.card = card;
+    }
+
+    public PlayableCardView getCardInSlot() {
+        return this.card;
+    }
+
+    public void empty() {
+        this.card = null;
     }
 }
